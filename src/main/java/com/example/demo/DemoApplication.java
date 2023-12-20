@@ -19,8 +19,25 @@ public class DemoApplication {
     @RequestMapping("/")
     String home() {
         logger.info("home() method called"); // Log a message when home() is called
+        String clientIP = getClientIP();
+        logger.info("Client IP: " + clientIP);
         return "Merhaba OpenShift!";
     }
+
+    private String getClientIP() {
+        String clientIP = request.getHeader("X-Forwarded-For");
+        if (clientIP == null || clientIP.isEmpty() || "unknown".equalsIgnoreCase(clientIP)) {
+            clientIP = request.getHeader("Proxy-Client-IP");
+        }
+        if (clientIP == null || clientIP.isEmpty() || "unknown".equalsIgnoreCase(clientIP)) {
+            clientIP = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (clientIP == null || clientIP.isEmpty() || "unknown".equalsIgnoreCase(clientIP)) {
+            clientIP = request.getRemoteAddr();
+        }
+        return clientIP;
+    }
+
 
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
