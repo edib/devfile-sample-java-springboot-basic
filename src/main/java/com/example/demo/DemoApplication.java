@@ -17,6 +17,9 @@ public class DemoApplication {
  
     private static final Logger logger = LoggerFactory.getLogger(DemoApplication.class);
 
+    @Autowired
+    private HttpServletRequest request;
+
     @RequestMapping("/")
     String home() {
         logger.info("home() method called"); // Log a message when home() is called
